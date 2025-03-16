@@ -19,8 +19,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const backgroundAudio = new Audio();
     backgroundAudio.src = '../Assets/background.mp3';
+
+    const startAudio = new Audio();
+    startAudio.src = '../Assets/gameStart.mp3';
+
+    const gameOverAudio = new Audio();
+    gameOverAudio.src = '../Assets/gameOver.mp3';
+
+
     
-    let initiateTimer = () => {
+    let startGame = () => {
         
         if (!timer) {
             timer = setInterval(() => {
@@ -104,7 +112,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     let clickDestroyElement = (id)=>{
         var element = document.getElementById(id);
-        element.remove();
+        element?.remove();
     }
 
     let speedUp = ()=>{
@@ -121,7 +129,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
                 clearInterval(timer);
                 timer = null;
-                initiateTimer();
+                startGame();
                 if(nonclicableSpawn < 0.5){
                     nonclicableSpawn += 0.1
                 }
@@ -145,11 +153,57 @@ document.addEventListener('DOMContentLoaded', ()=>{
             linelinesDiv.innerText = '☠️';
 
             lifeLines -= 1;
+
+            if(lifeLines == 0){
+                gameOverHere();
+                gameOverAudio.play();
+                showModel('.gameOverMenu');
+            }
         }
     }
 
+    document.querySelector('.play').addEventListener('click', ()=>{
+        startAudio.play();
+        hideModel('.mainMenuModel');
+        startGame();
+    });
+
+    document.querySelector('.backtomenu').addEventListener('click', ()=>{
+        showModel('.mainMenuModel');
+        hideModel('.gameOverMenu');
+    });
+
+    document.querySelector('.restart').addEventListener('click', ()=>{
+        startAudio.play();
+        hideModel('.mainMenuModel');
+        hideModel('.gameOverMenu');
+        startGame();
+    });
+
+    let showModel = (clsName)=>{
+        let model = document.querySelector(clsName);
+        model.classList.add('showModel');
+        model.classList.remove('hideModel');
+    }
+
+    let hideModel = (clsName)=>{
+        let model = document.querySelector(clsName);
+        model.classList.add('hideModel');
+        model.classList.remove('showModel');
+    }
+
+    let gameOverHere = ()=>{
+        clearInterval(timer);
+
+        let elementContainer = document.querySelector('.elementContainer');
+        elementContainer.innerHTML = '';
+
+        let scoreOpacityHigh = document.querySelector('.mainScorePoint');
+        scoreOpacityHigh.classList.add('scoreOpacityHigh');
+    }
+
     //backgroundAudio.play();
-    //initiateTimer();
+    //startGame();
    
     //pixabay Sound
 
