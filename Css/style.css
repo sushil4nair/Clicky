@@ -1,0 +1,116 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #1A1A19;
+    overflow: hidden;
+    user-select: none;
+    /* cursor: default; */
+    font-family:  "Lexend", sans-serif;
+    
+    
+}
+
+.backgroundOuter{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 0;
+    inset: 0;
+    margin: auto;
+    filter: blur(100px);
+    opacity: 0.6;
+}
+
+.backgroundInside{
+    border-radius: 99999px;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 100vw;
+    height: 100vh;
+    min-width: 1000px;
+    overflow: hidden;
+    background-color: aqua;
+}
+
+.background{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    inset: 0;
+    margin: auto;
+
+    background: conic-gradient(from 0deg, #FF7F3E, #859F3D, #80C4E9, #4335A7, #FF2929, #FFB200, #9ABF80);
+
+    animation: spinBackground 8s linear infinite;
+}
+
+@keyframes spinBackground{
+    0%{
+        transform: rotate(0deg) scale(2);
+    }
+
+    100%{
+        transform: rotate(1turn) scale(2);
+    }
+}
+
+.mainScorePoint{
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 50em;
+    user-select: none;
+    cursor: default;
+    opacity: .1;
+    color: white;
+}
+.elementContainer{
+    position: relative;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    /* opacity: 0.4;
+    background-color: #000000; */
+    cursor: url("../Assets/thumb.png"), auto !important;
+}
+
+.elements{
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    position: absolute;
+    z-index: 2;
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 7em;
+}
+
+.lifeLineContainer{
+    position: absolute;
+    z-index: 1;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.lifeLineContainer ul{
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+}
+
+.lifeLineContainer ul li{
+    font-size: 2em;
+}
