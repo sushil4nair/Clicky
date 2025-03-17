@@ -9,8 +9,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let lifeLines = 3;
     let nonclicableSpawn = 0.1;
     let highScore = 0;
+    let fxSound = true;
+    let bgSound = true;
 
-    const returnEmojis = returnEmoji();
+    let returnEmojis = returnEmoji();
 
     const clickableAudio = new Audio();
     clickableAudio.src = '../Assets/pop.mp3'
@@ -20,6 +22,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const backgroundAudio = new Audio();
     backgroundAudio.src = '../Assets/background.mp3';
+    backgroundAudio.loop = true;
 
     const startAudio = new Audio();
     startAudio.src = '../Assets/gameStart.mp3';
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     gameOverAudio.src = '../Assets/gameOver.mp3';
 
 
-    
+   
     let startGame = () => {
         
         if (!timer) {
@@ -71,7 +74,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         
         if(isNonClickable){
             element.addEventListener('click', ()=>{
-                nonclickableAudio.play();
+                if(fxSound) nonclickableAudio.play();
                 updateLifeline();
                 let mainScorePoint = document.querySelector('.mainScorePoint');
                 clicked -= 1;
@@ -80,7 +83,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             });
         }else{
             element.addEventListener('click', ()=>{
-                clickableAudio.play();
+                if(fxSound) clickableAudio.play();
 
                 let mainScorePoint = document.querySelector('.mainScorePoint');
                 clicked += 1;
@@ -126,7 +129,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 spawnRate -=100;
                 destroyRate = spawnRate*2;
 
-                innerText = returnEmojis.next().value
+                innerText = returnEmojis.next().value || '🤬';
 
                 clearInterval(timer);
                 timer = null;
@@ -157,7 +160,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
             if(lifeLines == 0){
                 gameOverHere();
-                gameOverAudio.play();
+                backgroundAudio.pause();
+                if(fxSound) gameOverAudio.play();
                 showModel('.gameOverMenu');
             }
         }
@@ -165,10 +169,35 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     document.querySelector('.play').addEventListener('click', ()=>{
         ResetAll();
-        startAudio.play();
         hideModel('.mainMenuModel');
-        startGame();
+        if(bgSound) backgroundAudio.play();
+        startCountDown()
+
+        // if(bgSound) backgroundAudio.play();
+        // if(fxSound) startAudio.play();
+        // startGame();
     });
+
+    document.querySelector('.setting').addEventListener('click', ()=>{
+        document.querySelector('.menus1').style.transform = 'translateX(-100%)';
+        document.querySelector('.menus2').style.transform = 'translateX(-100%)';
+    });
+
+    document.querySelectorAll('.back').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelector('.menus1').style.transform = 'translateX(0%)';
+            document.querySelector('.menus2').style.transform = 'translateX(0%)';
+            document.querySelector('.menus3').style.transform = 'translateX(0%)';
+        });
+    });
+    
+
+    document.querySelector('.about').addEventListener('click', ()=>{
+        document.querySelector('.menus1').style.transform = 'translateX(-100%)';
+        document.querySelector('.menus3').style.transform = 'translateX(-200%)';
+    });
+
+    
 
     document.querySelector('.backtomenu').addEventListener('click', ()=>{
         ResetAll();
@@ -178,11 +207,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     document.querySelector('.restart').addEventListener('click', ()=>{
         ResetAll();
-        startAudio.play();
+        if(bgSound) backgroundAudio.play();
+        if(fxSound) startAudio.play();
         hideModel('.mainMenuModel');
         hideModel('.gameOverMenu');
         startGame();
     });
+
+    document.getElementById('bgSoundId').addEventListener('change', function() {
+        if (this.checked) {
+            bgSound = false;
+            // backgroundAudio.pause();
+        } else {
+            bgSound = true;
+            // backgroundAudio.play();
+        }
+    });
+
+    document.getElementById('fxSoundId').addEventListener('change', function() {
+        if (this.checked) {
+            fxSound = false;
+        } else {
+            fxSound = true;
+        }
+    });
+    
 
     let showModel = (clsName)=>{
         let model = document.querySelector(clsName);
@@ -217,13 +266,60 @@ document.addEventListener('DOMContentLoaded', ()=>{
         lifeLines = 3;
         nonclicableSpawn = 0.1;
 
+        returnEmojis = returnEmoji();
+
+        let scoreOpacityHigh = document.querySelector('.mainScorePoint');
+        scoreOpacityHigh.classList.remove('scoreOpacityHigh');
+
+        let linelineIcon = document.querySelectorAll('.lineline');
+        linelineIcon.forEach((elem)=>{
+            elem.innerText = '😇';
+        })
+
         document.querySelector('.mainScorePoint').innerText = '00';
+
+        document.querySelector('.menus1').style.transform = 'translateX(0%)';
+        document.querySelector('.menus2').style.transform = 'translateX(0%)';
     }
 
     //backgroundAudio.play();
     //startGame();
    
     //pixabay Sound
+
+    let startCountDown = () => {
+
+        const messages = [
+            "For the love of all things good, avoid the shit emoji. Your future self will thank you.",
+            "Clicking the shit emoji is a choice... and not a good one. Choose wisely.",
+            "Please, don’t click the shit. Your dignity is worth more than that.",
+            "Pro tip: shit emoji : bad. Just don’t do it.",
+            "Avoid the shit emoji like you avoid your ex’s texts. Trust me, it’s for the best.",
+            "Don’t click the shit emoji... unless you’re into poor life choices."
+        ];
+
+        const randomIndex = Math.floor(Math.random() * messages.length);
+        document.getElementById('randomTip').innerText = messages[randomIndex];
+
+        showModel('.countDownPage');
+        let countdownValue = 4;
+
+        let intervalId = setInterval(() => {
+            document.querySelector('.countNumber').innerText = countdownValue;
+            countdownValue--;
+    
+            if (countdownValue < 0) {
+                clearInterval(intervalId); 
+                hideModel('.countDownPage');
+
+                if(fxSound) startAudio.play();
+                startGame();
+            }
+        }, 1000);
+    };
+    
+
+
 
 
 });
