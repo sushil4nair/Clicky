@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let innerText = '😌';
     let lifeLines = 3;
     let nonclicableSpawn = 0.1;
+    let highScore = 0;
 
     const returnEmojis = returnEmoji();
 
@@ -163,17 +164,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
 
     document.querySelector('.play').addEventListener('click', ()=>{
+        ResetAll();
         startAudio.play();
         hideModel('.mainMenuModel');
         startGame();
     });
 
     document.querySelector('.backtomenu').addEventListener('click', ()=>{
+        ResetAll();
         showModel('.mainMenuModel');
         hideModel('.gameOverMenu');
     });
 
     document.querySelector('.restart').addEventListener('click', ()=>{
+        ResetAll();
         startAudio.play();
         hideModel('.mainMenuModel');
         hideModel('.gameOverMenu');
@@ -200,6 +204,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
         let scoreOpacityHigh = document.querySelector('.mainScorePoint');
         scoreOpacityHigh.classList.add('scoreOpacityHigh');
+    }
+
+    function ResetAll(){
+        timer = null;
+        elementCount = 1;
+        clicked = 0;
+        speedUpConfig = {lastSpeenOn: 1, currentSpeed: 1, nextSpeedOn: 10};
+        spawnRate = 1000;
+        destroyRate = 2000;
+        innerText = '😌';
+        lifeLines = 3;
+        nonclicableSpawn = 0.1;
+
+        document.querySelector('.mainScorePoint').innerText = '00';
     }
 
     //backgroundAudio.play();
